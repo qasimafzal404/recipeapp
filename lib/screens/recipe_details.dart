@@ -7,6 +7,7 @@ import 'package:recipeapp/Widgets/my_icon_button.dart';
 import 'package:recipeapp/Widgets/quantity_increment_decrement.dart';
 import 'package:recipeapp/provider/favourite_provider.dart';
 import '../provider/quantity_provider.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 class RecipeDetails extends StatefulWidget {
   final DocumentSnapshot documentSnapshot;
@@ -62,7 +63,7 @@ class _RecipeDetailsState extends State<RecipeDetails> {
                     decoration: BoxDecoration(
                       image: DecorationImage(
                         fit: BoxFit.cover,
-                        image: NetworkImage(widget.documentSnapshot['image']),
+                        image: CachedNetworkImageProvider(widget.documentSnapshot['image']),
                       ),
                     ),
                   ),
@@ -224,25 +225,26 @@ class _RecipeDetailsState extends State<RecipeDetails> {
                     children: [
                       Row(
                         children: [
-                          Column(
-                            children: [
-                              ...widget.documentSnapshot['ingredientsImage']
-                                  .map<Widget>(
-                                (imageUrl) => Container(
-                                  height: 60,
-                                  width: 60,
-                                  margin: const EdgeInsets.only(bottom: 10),
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(20),
-                                    image: DecorationImage(
-                                      fit: BoxFit.cover,
-                                      image: NetworkImage(imageUrl),
-                                    ),
-                                  ),
-                                ),
-                              )
-                            ],
-                          ),
+                         Column(
+  children: [
+    ...widget.documentSnapshot['ingredientsImage']
+        .map<Widget>(
+          (imageUrl) => Container(
+            height: 60,
+            width: 60,
+            margin: const EdgeInsets.only(bottom: 10),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(20),
+              image: DecorationImage(
+                fit: BoxFit.cover,
+                image: CachedNetworkImageProvider(imageUrl),
+              ),
+            ),
+          ),
+        )
+        .toList(),
+  ],
+                         ),
                           const SizedBox(width: 20),
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,

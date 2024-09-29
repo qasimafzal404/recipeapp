@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:recipeapp/provider/favourite_provider.dart';
 import 'package:recipeapp/screens/recipe_details.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 class FoodItemDisplay extends StatefulWidget {
   final DocumentSnapshot<Object?> documentSnapshot;
@@ -31,19 +32,19 @@ class _FoodItemDisplayState extends State<FoodItemDisplay> {
               children: [
                 Hero(
                   tag: widget.documentSnapshot.id,
-                  child: Container(
-                    width: double.infinity,
-                    height: 160,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(20),
-                      image: DecorationImage(
-                        fit: BoxFit.cover,
-                        image: data != null && data.containsKey('image')
-                            ? NetworkImage(data['image'])
-                            : const NetworkImage(''), // default image
-                      ),
-                    ),
-                  ),
+                child: Container(
+  width: double.infinity,
+  height: 160,
+  decoration: BoxDecoration(
+    borderRadius: BorderRadius.circular(20),
+    image: DecorationImage(
+      fit: BoxFit.cover,
+      image: data != null && data.containsKey('image')
+          ? CachedNetworkImageProvider(data['image'])
+          : CachedNetworkImageProvider(''), // default image
+    ),
+  ),
+),
                 ),
                 const SizedBox(
                   height: 10,

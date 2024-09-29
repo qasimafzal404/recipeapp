@@ -4,6 +4,7 @@ import 'package:iconsax/iconsax.dart';
 import 'package:recipeapp/provider/favourite_provider.dart';
 
 import '../Widgets/colors.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 class FavouriteScreen extends StatefulWidget {
   const FavouriteScreen({super.key});
@@ -74,7 +75,7 @@ class _FavouriteScreenState extends State<FavouriteScreen> {
                                         borderRadius: BorderRadius.circular(20),
                                         image: DecorationImage(
                                           fit: BoxFit.cover,
-                                          image: NetworkImage(
+                                          image: CachedNetworkImageProvider(
                                               favoutiteItems['image']),
                                         )),
                                   ),

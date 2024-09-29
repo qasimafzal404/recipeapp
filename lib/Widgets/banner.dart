@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:recipeapp/screens/view_all_screen.dart';
 
 import 'colors.dart';
 
@@ -39,7 +40,12 @@ class BannerToExplore extends StatelessWidget {
                     backgroundColor: Colors.white,
                     elevation: 0,
                   ),
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.push(
+                           context,
+                           MaterialPageRoute(
+                               builder: (_) => const ViewAllScreen())
+              );},
                   child: const Text(
                     "Explore",
                     style: TextStyle(

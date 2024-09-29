@@ -1,6 +1,8 @@
 // ignore_for_file: avoid_print
 
 
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:recipeapp/Widgets/banner.dart';
@@ -9,6 +11,8 @@ import 'package:recipeapp/Widgets/food_item_display.dart';
 import 'package:recipeapp/Widgets/my_icon_button.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:recipeapp/screens/view_all_screen.dart';
+import 'package:http/http.dart' as http;
+import 'image_display_screen.dart';
 
 class MyAppHomeScreen extends StatefulWidget {
   const MyAppHomeScreen({super.key});
@@ -44,7 +48,7 @@ class _MyAppHomeScreenState extends State<MyAppHomeScreen> {
               children: [ const SizedBox(height: 5,),
                 headerParts(),
                  const SizedBox(height: 10,),
-                mysearchBar(),
+                mySearchBar(),
                  const SizedBox(height: 15,),
                 const BannerToExplore(),
                 const Padding(
@@ -191,27 +195,57 @@ class _MyAppHomeScreenState extends State<MyAppHomeScreen> {
     );
   }
 
-  Padding mysearchBar() {
-    return Padding(
-        padding: const EdgeInsets.symmetric(vertical: 22),
-        child: TextField(
-          decoration: InputDecoration(
-            filled: true,
-            prefix: const Icon(Iconsax.search_normal),
-            fillColor: Colors.white,
-            border: InputBorder.none,
-            hintText: "Search for Recipes",
-            hintStyle: const TextStyle(color: Colors.grey),
-            enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(10),
-              borderSide: BorderSide.none,
-            ),
-            focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(10),
-              borderSide: BorderSide.none,
-            ),
-          ),
-        ));
-        
+Padding mySearchBar() {
+  return Padding(
+    padding: const EdgeInsets.symmetric(vertical: 22),
+    child: TextField(
+      onChanged: (value) async {
+        if (value.isNotEmpty) {
+          try {
+            final imageUrls = await searchForImages(value);
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => ImageDisplayScreen(imageUrls: imageUrls),
+              ),
+            );
+          } catch (error) {
+            // Handle search errors gracefully, e.g., display an error message
+            print("Error searching for images: $error");
+          }
+        }
+      },
+      decoration: InputDecoration(
+        filled: true,
+        fillColor: Colors.white,
+        border: InputBorder.none,
+        hintText: "Search for Recipes",
+        hintStyle: const TextStyle(color: Colors.grey),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(10),
+          borderSide: BorderSide.none,
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(10),
+          borderSide: BorderSide.none,
+        ),
+        suffixIcon: const Icon(Icons.search), // Icon placed at the right corner
+      ),
+    ),
+  );
+}
+}
+Future<List<String>> searchForImages(String searchTerm) async {
+  // Replace with your actual image search implementation
+  // (e.g., using Unsplash API or Pixabay API)
+  final response = await http.get(Uri.parse('https://api.unsplash.com/search/photos?query=$searchTerm'));
+  if (response.statusCode == 200) {
+    final data = jsonDecode(response.body);
+    final imageUrls = data['results'].map<String>((result) => result['urls']['regular']).toList();
+    return imageUrls;
+  } else {
+    throw Exception('Failed to fetch images');
   }
 }
+  
+
