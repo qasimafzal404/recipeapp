@@ -14,6 +14,6 @@ Color kprimaryColor(BuildContext context) {
 
 Color kBannerColor(BuildContext context) {
   return Theme.of(context).brightness == Brightness.dark
-      ? const Color(0xff4caf50) // Dark theme banner color (example)
+      ? const Color.fromARGB(255, 34, 101, 36) // Dark theme banner color (example)
       : const Color(0xff579f8c); // Light theme banner color
 }
